@@ -186,7 +186,6 @@ mar11_commu = month1103_df |>
   select(c(1, 26:30)) |> 
   distinct() |> 
   arrange(participantID)
-view(mar11_commu)
 ```
 
 ### 2.1.2 Location
