@@ -2,7 +2,7 @@
 title: "Final_Report"
 format: html
 ---
-ahisihdsds
+
 # 1. Introduction
 
 # 2. Data Tidying
@@ -206,4 +206,5 @@ date_coordinates = location_df |>
   select(participantID, date, x, y) |> 
   distinct()
 ```
+
 
