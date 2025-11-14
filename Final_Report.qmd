@@ -93,19 +93,25 @@ Except for participants' demographics, the case we select is (participant, month
 For the case (participant), we create separate tibble for demographics:
 
 ```{r}
-mar_demo = initial_df |> select(1:19)
+mar_demo = initial_df |> 
+  select(1:19) |> 
+  distinct()
 ```
 
 group participation
 
 ```{r}
-mar_group = initial_df |> select(c(1, 53:76))
+mar_group = initial_df |> 
+  select(c(1, 53:76)) |> 
+  distinct()
 ```
 
 Communication with friends
 
 ```{r}
-mar10_commu = initial_df |> select(c(1, 277:280))
+mar10_commu = initial_df |> 
+  select(c(1, 277:280)) |> 
+  distinct()
 ```
 
 ***Monthly survey April, 2010***
@@ -113,15 +119,17 @@ mar10_commu = initial_df |> select(c(1, 277:280))
 Big 5
 
 ```{r}
-apr_big5 = month1004_df |> select(c(1, 11:54))
-
+apr_big5 = month1004_df |> 
+  select(c(1, 11:54)) |> 
+  distinct()
 ```
 
 group participation
 
 ```{r}
-apr_group = month1004_df |> select(c(1, 55:114))
-view(apr_group)
+apr_group = month1004_df |> 
+  select(c(1, 55:114)) |> 
+  distinct()
 ```
 
 ***Monthly survey May, 2010***
@@ -129,13 +137,17 @@ view(apr_group)
 group participation
 
 ```{r}
-may_group = month1005_df |>select(c(1, 73:132))
+may_group = month1005_df |>
+  select(c(1, 73:132)) |> 
+  distinct()
 ```
 
 well-being
 
 ```{r}
-may_well_being = month1005_df |> select(c(1, 32:72))
+may_well_being = month1005_df |> 
+  select(c(1, 32:72)) |> 
+  distinct()
 ```
 
 ***Monthly survey October, 2010***
@@ -143,14 +155,17 @@ may_well_being = month1005_df |> select(c(1, 32:72))
 sleep actual
 
 ```{r}
-oct_sleep_act = month1010_df |> select(c(1, 80))
+oct_sleep_act = month1010_df |> 
+  select(c(1, 80)) |> 
+  distinct()
 ```
 
 Aerobic exercise actual
 
 ```{r}
-oct_exe_act = month1010_df |> select(c(1, 62))
-view(oct_exe_act)
+oct_exe_act = month1010_df |> 
+  select(c(1, 62)) |> 
+  distinct()
 ```
 
 ***Monthly survey March, 2011***
@@ -158,7 +173,9 @@ view(oct_exe_act)
 Communication with friends
 
 ```{r}
-mar11_commu = month1103_df |> select(c(1, 26:30))
+mar11_commu = month1103_df |> 
+  select(c(1, 26:30)) |> 
+  distinct()
 ```
 
 ### 2.1.2 Location
@@ -206,5 +223,3 @@ date_coordinates = location_df |>
   select(participantID, date, x, y) |> 
   distinct()
 ```
-
-
