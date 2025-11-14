@@ -163,7 +163,11 @@ may_well_being = month1005_df |>
 
 **a. Aerobic exercise actual**
 
-```{r} oct_exe_act = month1010_df |>    select(c(1, 62)) |>    distinct() |>    arrange(participantID)}
+```{r}
+oct_exe_act = month1010_df |>    
+  select(c(1, 62)) |>    
+  distinct() |>    
+  arrange(participantID)
 ```
 
 **b. Sleep actual**
