@@ -423,8 +423,6 @@ setdiff(all_participants, apr_group$participantID) |>
   length()
 ```
 
-The researcher spotted several repeated values in the columns and decided to pivot the columns into multiple rows for each different observation.
-
 ```{r}
 # change the data type into character
 
@@ -703,4 +701,5 @@ Now the output looks like this:
 #| warning: false
 knitr::kable(head(mar10_commu_clean,5), format = "pipe") 
 ```
+
 
