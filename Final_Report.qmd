@@ -226,7 +226,7 @@ Location every 30 minutes (`Location.csv`), with each record including the parti
 #create a tibble for Location.csv, and have a preview of the data set
 
 location_df = read.csv("Location.csv") |> arrange(participantID)
-head(location_df)
+knitr::kable(head(location_df), format = "pipe") 
 ```
 
 We tried to define the primary key, however, even if we combine all the column names together, the combination itself still cannot identify every single row uniquely, as it is shown in the following code:
@@ -698,3 +698,4 @@ Now the output looks like this:
 ```{r}
 knitr::kable(head(mar10_commu_clean,5), format = "pipe") 
 ```
+
