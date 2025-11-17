@@ -4,12 +4,14 @@ format: html
 ---
 
 # 1.1 Introduction
-**The Friends and Family study was developed to better understand how people make decisions in their everyday lives, with a particular interest in how social relationships shape those choices and whether certain personal or social tools might help people make more effective decisions. The study took place in a residential community for young families located next to a major research university in North America. All households consisted of couples, and at least one partner in each couple was affiliated with the university. More than 130 adults participated during 2010 across two recruitment phases, forming a relatively small, closely connected community where many families also had children.
 
-**To capture detailed information about daily behaviour and interactions, participants used their personal Android smartphones that automatically recorded call logs, GPS location data, and SMS activity. These behavioural traces were combined with repeated self-report measures to gain insight into personal characteristics, attitudes, routines, and wellbeing. Participants completed a baseline personality survey, followed by a series of monthly and weekly questionnaires, as well as daily reports related to activities, lifestyle habits, and mood. 
+The Friends and Family study was developed to better understand how people make decisions in their everyday lives, with a particular interest in how social relationships shape those choices and whether certain personal or social tools might help people make more effective decisions. The study took place in a residential community for young families located next to a major research university in North America. All households consisted of couples, and at least one partner in each couple was affiliated with the university. More than 130 adults participated during 2010 across two recruitment phases, forming a relatively small, closely connected community where many families also had children.
 
-# 1.2 Research Questions 
-**Each group member selected an individual research question to explore using the tidied dataset. Carina will examine how sleep patterns and aerobic exercise levels are related and whether this relationship differs by gender. Ana will investigate how the friendship network evolves over time and how observed changes may relate to personal characteristics. Qi will focus on how the frequency of different types of networks, such as friends, fitness, and call or SMS interactions, relates to participant characteristics. Pherolyn will explore movement patterns by identifying who moves frequently versus infrequently and whether this relates to well-being. Xinran will study how communication with remote friends changes over time and how these patterns relate to personal attributes.
+To capture detailed information about daily behaviour and interactions, participants used their personal Android smartphones that automatically recorded call logs, GPS location data, and SMS activity. These behavioural traces were combined with repeated self-report measures to gain insight into personal characteristics, attitudes, routines, and wellbeing. Participants completed a baseline personality survey, followed by a series of monthly and weekly questionnaires, as well as daily reports related to activities, lifestyle habits, and mood.
+
+# 1.2 Research Questions
+
+Each group member selected an individual research question to explore using the tidied dataset. Carina will examine how sleep patterns and aerobic exercise levels are related and whether this relationship differs by gender. Ana will investigate how the friendship network evolves over time and how observed changes may relate to personal characteristics. Qi will focus on how the frequency of different types of networks, such as friends, fitness, and call or SMS interactions, relates to participant characteristics. Pherolyn will explore movement patterns by identifying who moves frequently versus infrequently and whether this relates to well-being. Xinran will study how communication with remote friends changes over time and how these patterns relate to personal attributes.
 
 # 2. Data Tidying
 
@@ -23,16 +25,16 @@ library(readxl)
 knitr::opts_chunk$set(message = FALSE)
 ```
 
-## 2.1 Principle 1: Each type of case must have its own tibble. 
+## 2.1 Principle 1: Each type of case must have its own tibble.
 
 **Principle 1 states that each identified type of case be stored in its own tibble.** A tibble representing a specific case type should function as a clear unit of analysis and must not contain duplicated or redundant information. This often involves using functions such as `select()` to keep only relevant variables and `distinct()` to ensure that each observational unit appears only once. Storing data in such way improves storage efficiency, enhances consistency, and minimizes the risk of errors during table joins.
 
 To ensure principle 1, there are **two key steps**:
 
-1.   [Identify the different types of cases.]{.underline}\
+1.  [Identify the different types of cases.]{.underline}\
     To do this, we first need to identify the primary key in each data set, because cases are defined as combinations of the primary key.
 
-2.   [Choose the variables we need and split the data into separate tibbles.]{.underline}\
+2.  [Choose the variables we need and split the data into separate tibbles.]{.underline}\
     Each tibble should include only the variables that describe that specific type of case.
 
 ### 2.1.1 Monthly Survey
@@ -106,11 +108,11 @@ In the next step, we extract items like "Formal groups participation changed“ 
 
 **2.1.1.3 Creating tibbles for different cases**
 
-***Initial Survey/March, 2010***
+**Initial Survey/March, 2010**
 
 This data sets contains both participants' metadata, demographics and responses to survey items. Cases for this data set are (participant) and (participant, month).
 
-**a. Demographics**
+*Demographics*
 
 For the case (participant), we create separate tibble for demographics from initial survey. More specifically, the demographic tibble only includes participants' ID, and participants' gender. Due to privacy issues, sensitive information such as apartment number, name, cell phone number, etc. were already removed or anonymised in the original data sets, thus were removed from the tibble. Information like start date and end date are not characteristics of the participants, thus were also removed from the tibble.
 
@@ -121,7 +123,7 @@ mar_demo = initial_df |>
   arrange(participantID)
 ```
 
-**b. Group participation**
+*Group participation*
 
 ```{r}
 mar_group = initial_df |> 
@@ -130,7 +132,7 @@ mar_group = initial_df |>
   arrange(participantID)
 ```
 
-**c. Communication with friends**
+*Communication with friends*
 
 ```{r}
 mar10_commu = initial_df |> 
@@ -139,9 +141,9 @@ mar10_commu = initial_df |>
   arrange(participantID)
 ```
 
-***Monthly survey April, 2010***
+**Monthly survey April, 2010**
 
-**a. Big 5**
+*Big 5*
 
 ```{r}
 apr_big5 = month1004_df |> 
@@ -150,7 +152,7 @@ apr_big5 = month1004_df |>
   arrange(participantID)
 ```
 
-**b. Group participation**
+*Group participation*
 
 ```{r}
 apr_group = month1004_df |> 
@@ -159,9 +161,9 @@ apr_group = month1004_df |>
   arrange(participantID)
 ```
 
-***Monthly survey May, 2010***
+**Monthly survey May, 2010**
 
-**a. Group participation**
+*Group participation*
 
 ```{r}
 may_group = month1005_df |>
@@ -170,7 +172,7 @@ may_group = month1005_df |>
   arrange(participantID)
 ```
 
-**b. Well-being**
+*Well-being*
 
 ```{r}
 may_well_being = month1005_df |> 
@@ -179,9 +181,9 @@ may_well_being = month1005_df |>
   arrange(participantID)
 ```
 
-***Monthly survey October, 2010***
+**Monthly survey October, 2010**
 
-**a. Aerobic exercise actual**
+*Aerobic exercise actual*
 
 ```{r}
 oct_exe_act = month1010_df |>    
@@ -190,7 +192,7 @@ oct_exe_act = month1010_df |>
   arrange(participantID)
 ```
 
-**b. Sleep actual**
+*Sleep actual*
 
 ```{r}
 oct_sleep_act = month1010_df |> 
@@ -199,9 +201,9 @@ oct_sleep_act = month1010_df |>
   arrange(participantID)
 ```
 
-***Monthly survey March, 2011***
+**Monthly survey March, 2011**
 
-**Communication with friends**
+*Communication with friends*
 
 ```{r}
 mar11_commu = month1103_df |> 
@@ -257,15 +259,15 @@ date_coordinates = location_df |>
   arrange(participantID)
 ```
 
+## 2.2 Principle 2: Each observation must have its own row. 
 
-
-## 2.2 Principle 2: Each observation must have its own row. (Draft ver.)
-
-what is principle 2... For principle 2, the researcher needed to ensure that no multiple observations were stacked into the same row. In order to achieve that, the researcher first examined all 11 tibbles created from the first step to spot repeated information. Then, the researcher should delete repeated information among different rows.
+For principle 2, the researcher needed to ensure that no multiple observations were stacked into the same row. In order to achieve that, the researcher first examined all 11 tibbles created from the first step to spot repeated information. Then, the researcher should delete repeated information among different rows.
 
 ### 2.2.1 Monthly Survey
 
-**a. Demographics**
+**Initial Survey/March, 2010**
+
+*Demographics*
 
 ```{r}
 #check to count the distinct values within Gender
@@ -310,7 +312,7 @@ mar_demo <- mar_demo |>
   arrange(participantID)
 ```
 
-**b. Group Participation**
+*Group Participation*
 
 ```{r}
 # delete rows with all NA values because they provide essentially no information.
@@ -338,7 +340,7 @@ mar_group <- mar_group |>
   distinct()
 ```
 
-**c. Communication with friends**
+*Communication with friends*
 
 ```{r}
 # delete rows with all NA values because they provide essentially no information.
@@ -364,9 +366,9 @@ setdiff(all_participants, mar10_commu$participantID) |>
   length()
 ```
 
-***Monthly survey April, 2010***
+**Monthly survey April, 2010**
 
-**a. Big 5**
+*Big 5*
 
 ```{r}
 # fill all empty cells with NA values
@@ -386,7 +388,7 @@ setdiff(all_participants, apr_big5$participantID) |>
   length()
 ```
 
-**b. Group participation**
+*Group participation*
 
 ```{r}
 # fill all empty cells with NA values
@@ -430,9 +432,9 @@ apr_group <- apr_group |>
   mutate(across(-participantID, as.character))
 ```
 
-***Monthly survey May, 2010***
+**Monthly survey May, 2010**
 
-**a. Group participation**
+*Group participation*
 
 ```{r}
 
@@ -463,7 +465,7 @@ setdiff(all_participants, may_group$participantID) |>
   length()
 ```
 
-**b. Well-being**
+*Well-being*
 
 ```{r}
 # fill all empty cells with NA values
@@ -486,9 +488,9 @@ setdiff(all_participants, may_well_being$participantID) |>
   length()
 ```
 
-***Monthly survey October, 2010***
+**Monthly survey October, 2010**
 
-**a. Aerobic exercise actual**
+*Aerobic exercise actual*
 
 ```{r}
 # fill all empty cells with NA values
@@ -512,7 +514,7 @@ setdiff(all_participants, oct_exe_act$participantID) |>
   length()
 ```
 
-**b. Sleep actual**
+*Sleep actual*
 
 ```{r}
 # fill all empty cells with NA values
@@ -536,9 +538,9 @@ setdiff(all_participants, oct_sleep_act$participantID) |>
   length()
 ```
 
-***Monthly survey March, 2011***
+**Monthly survey March, 2011**
 
-**Communication with friends**
+*Communication with friends*
 
 ```{r}
 
@@ -592,7 +594,7 @@ setdiff(all_participants, date_coordinates$participantID) |>
   length()
 ```
 
-## 2.3 Principle 3: Each variable must have its own column. (Draft ver.)
+## 2.3 Principle 3: Each variable must have its own column. 
 
 According to the third principle, each variable must have its own column, and each column must be a variable. This implies, also, that each variable must be stored in its unique, separate column. Headers must be variable names, and not data; variables must not appear in both rows and columns.
 
@@ -650,6 +652,7 @@ mar_group_involvement <- mar_group |>
 ```
 
 Last, we left join the two artificially split tibbles to recreate the full one. `mar_group_involvement` features `r nrow(mar_group_belonging)` observations, and `mar_group_belonging` features `r nrow(mar_group_involvement)`, meaning that certain belonged-to groups have missing values for involvement. By left-joining on belonging, we capture those cases as well.
+
 ```{r}
 mar_group_clean <- left_join(
   mar_group_belonging,         
@@ -667,7 +670,6 @@ The clean tibble now looks like:
 
 knitr::kable(head(mar_group_clean,5), format = "pipe") 
 ```
-
 
 *Communication*
 
@@ -701,8 +703,3 @@ Now the output looks like this:
 #| warning: false
 knitr::kable(head(mar10_commu_clean,5), format = "pipe") 
 ```
-
-
-
-
-
