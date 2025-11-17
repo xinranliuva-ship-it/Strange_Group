@@ -5,6 +5,10 @@ format: html
 
 # 1. Introduction
 
+-   what is this project about
+
+-   what are our research questions maybe
+
 # 2. Data Tidying
 
 ```{r setup, include=FALSE}
@@ -17,15 +21,25 @@ library(readxl)
 knitr::opts_chunk$set(message = FALSE)
 ```
 
-## 2.1 Principle 1: Each type of case must have its own tibble. (Draft ver.)
+## 2.1 Principle 1: Each type of case must have its own tibble. 
 
-what is principle 1...
+**Principle 1 states that each identified type of case be stored in its own tibble.** A tibble representing a specific case type should function as a clear unit of analysis and must not contain duplicated or redundant information. This often involves using functions such as `select()` to keep only relevant variables and `distinct()` to ensure that each observational unit appears only once. Storing data in such way improves storage efficiency, enhances consistency, and minimizes the risk of errors during table joins.
+
+To ensure principle 1, there are **two key steps**:
+
+1.   [Identify the different types of cases.]{.underline}\
+    To do this, we first need to identify the primary key in each data set, because cases are defined as combinations of the primary key.
+
+2.   [Choose the variables we need and split the data into separate tibbles.]{.underline}\
+    Each tibble should include only the variables that describe that specific type of case.
 
 ### 2.1.1 Monthly Survey
 
 **2.1.1.1 What do monthly survey questionnaires contain?**
 
-The monthly survey is a compilation of survey questions that were asked across different months. Monthly questionnaire data sets are stored in different CSV files per different month (e.g. `SurveyMonthly.2010_04.csv`). However, based on our research questions, some of the monthly data sets are irrelevant. We decide to check whether survey questions across different months overlap, if not, we will only take the data sets that are relevant to our research questions into further data tidying process.
+The monthly survey is a compilation of survey responses collected across different months. Monthly survey data sets are stored in different CSV files per month (e.g. `SurveyMonthly.2010_04.csv`). Each data set has a similar structure, with first few rows consist of participants' metadata, followed by survey responses that vary month by month.
+
+There is a file called `SurveyMonthlyQuestionKey.csv`, which listed out all the scale names, scale items, and in which monthly survey were they being asked.However, based on our research questions, some of the monthly data sets are irrelevant. We will only take the data sets that are relevant to our research questions into further data tidying process.
 
 First, we imported all the monthly survey data sets into separate data frames:
 
@@ -61,7 +75,9 @@ for(i in 1:length(monthly_files)) {
 }
 ```
 
-Beneath is one example of the code how we check the primary key across all monthly data sets.
+**2.1.1.2 Primary key and cases**
+
+As mentioned above, apart from survey responses, all monthly survey data sets included participants' metadata, such as `participantID`, `start date` and `end date`. Participants' demographics were not collected every month, as it is listed in the `SurveyMonthlyQuestionKey.csv`. We deem that `participantID` is the primary key for every data set, beneath is one example of how we check the primary key across all monthly data sets.
 
 ```{r}
 #check whether participantID is the primary key for monthly survey in April, 2010
@@ -73,22 +89,24 @@ month1004_df |>
 
 We used the same code across different monthly data sets and confirmed that `participantID` is indeed the primary key for all of them. Thus, `participantID` will be included in all separate tibbles we created to act as the foreign key.
 
-In the Friends and Family data compilation, there is a file called `SurveyMonthlyQuestionKey.csv`, which listed out all the scale names, scale items, and in which monthly survey were they being asked. We manually checked the relevant scales according to the question key file. For example, for the research objectives "friendship network change", the relevant scale is called "group involvement", which was measured by several items across different months. For items like "Formal group involvement", it was only measured once in the initial survey, while for items like "Formal groups participation changed“ and "Formal groups new involvement“, it is more like an update to previous survey responses, thus were measured in both April and May, 2010, as it is listed below.
+However, between different months, the survey questions do overlap according to `SurveyMonthlyQuestionKey.csv`. For example, for the research objectives "friendship network change", the relevant scale is called "group involvement", which was measured by several items across different months. For items like "Formal group involvement", it was only measured once in the initial survey, while for items like "Formal groups participation changed“ and "Formal groups new involvement“, it is an update to previous survey responses, thus were measured in both April and May, 2010, as it is listed below.
 
 ```{r}
+#extract relevant information for "group involvement scale"
+
 survey_key = read_excel("SurveyMonthlyQuestionKey.xlsx")
 group_itemskey = survey_key |> 
   slice(c(168:171, 186:195))
 view(group_itemskey)
 ```
 
-According to the case we are using, (participant, month), we extract items like "Formal groups participation changed“ and "Formal groups new involvement“ from different monthly survey and store them in different tibbles (e.g. `mar_group`, `apr_group`, as mentioned in the following paragraphs).
+In the next step, we extract items like "Formal groups participation changed“ and "Formal groups new involvement“ from different monthly survey and store them in different tibbles (e.g. `mar_group`, `apr_group`, as mentioned in the following paragraphs). Therefore, the cases we are using contains both (participant) and (participant, month), with the former one focused on participants' demographics, and the latter one for variables that are related to our research questions.
 
-**2.1.1.2 Creating tibbles for different cases**
+**2.1.1.3 Creating tibbles for different cases**
 
 ***Initial Survey/March, 2010***
 
-This data sets contains both partisipants' demographics and responses to survey items. Cases for this data set are (participant) and (participant, month).
+This data sets contains both participants' metadata, demographics and responses to survey items. Cases for this data set are (participant) and (participant, month).
 
 **a. Demographics**
 
@@ -236,6 +254,7 @@ date_coordinates = location_df |>
   distinct() |> 
   arrange(participantID)
 ```
+
 
 
 ## 2.2 Principle 2: Each observation must have its own row. (Draft ver.)
@@ -609,3 +628,4 @@ all_participants <- c(
 setdiff(all_participants, date_coordinates$participantID) |> 
   length()
 ```
+
