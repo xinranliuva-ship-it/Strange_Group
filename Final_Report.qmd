@@ -136,7 +136,7 @@ mar_group = initial_df |>
 
 ```{r}
 mar10_commu = initial_df |> 
-  select(c(1, 277:280)) |> 
+  select(c(1, 43:46)) |> 
   distinct() |> 
   arrange(participantID)
 ```
@@ -703,3 +703,4 @@ Now the output looks like this:
 #| warning: false
 knitr::kable(head(mar10_commu_clean,5), format = "pipe") 
 ```
+
