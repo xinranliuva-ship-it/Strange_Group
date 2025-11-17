@@ -597,4 +597,114 @@ setdiff(all_participants, date_coordinates$participantID) |>
   length()
 ```
 
+## 2.3 Principle 3: Each variable must have its own column. (Draft ver.)
+
+According to the third principle, each variable must have its own column, and each column must be a variable. This implies, also, that each variable must be stored in its unique, separate column. Headers must be variable names, and not data; variables must not appear in both rows and columns.
+
+### 2.3.1 Monthly Survey
+
+For each of the relevant monthly survey tibbles, we must perform adequate tidying in accord with the principle.
+
+**Initial Survey/March, 2010**
+
+*Group participation*
+
+We may first inspect the original tibble. As seen below, column headers contain multiple types of information: besides the belonging/involvement variable, they also contain group number (1-6) and group type (formal/informal). This is in violation with principle three as stated above.
+
+```{r}
+#| echo: false
+#| warning: false
+mar_group[mar_group == ""] <- NA
+knitr::kable(head(mar_group,5), format = "pipe") 
+```
+
+First, we investigate the belonging columns. We use the `pivot_longer`function to transition from the wide format to a longer one, with new column headers `Formal_Or_Informal` and `Group_Number` storing the names either preceding or appended to the `Group_Belonging`variable. The problem lays with the fact that the variable `Group_Number` does not store the value of the *i*th group for each of the *n* participants, but the value of the *i*th formal or *i*th informal group. This is lacking in clarity. We thus simply count the rows which share the same `participantID`.
+
+```{r}
+mar_group_belonging <- mar_group |>
+  select(participantID, contains("belong.to"))|>
+  pivot_longer(
+    cols = 'Formal.groups.belong.to..Group.1.': 'Informal.groups.belong.to..Group.6.',
+    names_to = c("Formal_or_Informal", "Group_Number"),
+    names_pattern = "(Formal|Informal)\\.groups\\.belong\\.to\\.\\.Group\\.(\\d+)\\.",
+    values_to = "Group_Belonging",
+    values_drop_na = TRUE) |>
+  group_by(participantID) |>
+  mutate(
+    Group_Number = row_number()
+  ) |>
+  ungroup() 
+```
+
+Second, the same procedure is applied to the involvement columns.
+
+```{r}
+mar_group_involvement <- mar_group |>
+  select(participantID, contains(".involvement"))|>
+  pivot_longer(
+    cols = 'Formal.group.involvement..Group.1.': 'Informal.group.involvement..Group.6.',
+    names_to = c("Formal_or_Informal", "Group_Number"),
+    names_pattern = "(Formal|Informal)\\.group\\.involvement\\.\\.Group\\.(\\d+)\\.",
+    values_to = "Group_Involvement",
+    values_drop_na = TRUE) |>
+    group_by(participantID) |>
+    mutate(
+      Group_Number = row_number()
+    ) |>
+    ungroup() 
+```
+
+Last, we left join the two artificially split tibbles to recreate the full one. `mar_group_involvement` features `r nrow(mar_group_belonging)` observations, and `mar_group_belonging` features `r nrow(mar_group_involvement)`, meaning that certain belonged-to groups have missing values for involvement. By left-joining on belonging, we capture those cases as well.
+```{r}
+mar_group_clean <- left_join(
+  mar_group_belonging,         
+  mar_group_involvement,     
+  by = c("participantID", "Group_Number", "Formal_or_Informal")
+) |>
+  select(participantID, Group_Number, Group_Belonging, Group_Involvement, Formal_or_Informal)
+```
+
+The clean tibble now looks like:
+
+```{r}
+#| echo: false
+#| warning: false
+
+knitr::kable(head(mar_group_clean,5), format = "pipe") 
+```
+
+
+*Communication*
+
+Glimpse the communication table before principle three is applied. As can be noticed, one variable is here spread across several columns (channel of communication with friends). Frequencies are measured in terms of participant *and* channel.
+
+```{r}
+#| echo: false
+#| warning: false
+mar10_commu[mar10_commu == ""] <- NA
+knitr::kable(head(mar10_commu,5), format = "pipe") 
+```
+
+...mmkay
+
+```{r}
+mar10_commu_clean <- mar10_commu |>
+  pivot_longer(
+    cols = -participantID,
+    names_to = "Channel",
+    names_pattern ="Communicate\\.remote\\.friends\\.\\.(.*)",
+    values_to = "Frequency") |>
+  mutate(
+    Channel = str_replace_all(Channel, "\\.", " ") 
+  )
+```
+
+Now the output looks like this:
+
+```{r}
+#| echo: false
+#| warning: false
+knitr::kable(head(mar10_commu_clean,5), format = "pipe") 
+```
+
 
