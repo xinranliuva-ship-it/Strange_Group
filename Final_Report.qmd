@@ -212,7 +212,7 @@ mar11_commu = month1103_df |>
 
 ### 2.1.2 Location
 
-Location every 30 minutes (`Location.csv.bz2`), with each record including the participant ID associated with the data-collecting mobile phone (`participantID`), the date-time when the location is recorded (`date`), the the 68% confidence offset of the estimation from true location(`accuracy`, in meters), and the estimated location affine-transformed (`x`, `y`).
+Location every 30 minutes (`Location.csv`), with each record including the participant ID associated with the data-collecting mobile phone (`participantID`), the date-time when the location is recorded (`date`), the the 68% confidence offset of the estimation from true location(`accuracy`, in meters), and the estimated location affine-transformed (`x`, `y`).
 
 ```{r}
 #create a tibble for Location.csv, and have a preview of the data set
@@ -701,6 +701,7 @@ Now the output looks like this:
 #| warning: false
 knitr::kable(head(mar10_commu_clean,5), format = "pipe") 
 ```
+
 
 
 
