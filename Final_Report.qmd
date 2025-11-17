@@ -429,17 +429,6 @@ The researcher spotted several repeated values in the columns and decided to piv
 apr_group <- apr_group |>
   mutate(across(-participantID, as.character))
 
-# combine the columns into group type, interaction, and group_number
-
-apr_group <- apr_group |>
-  pivot_longer(
-    cols = -participantID,
-    names_to = c("group_type", "interaction", "group_number"),
-    names_pattern = "(Formal|Informal)groups(\\w+)\\.Group(\\d+)",
-    values_to = "group_name"
-  ) |>
-  filter(!is.na(group_name) & group_name != "")
-
 # change the data type for group number into integar
 
 apr_group <- apr_group |>
@@ -451,15 +440,23 @@ apr_group <- apr_group |>
 **a. Group participation**
 
 ```{r}
+
+may_group = month1005_df |>
+  select(c(1, 73:132)) |> 
+  distinct() |> 
+  arrange(participantID)
+```
+
+```{r}
 # fill all empty cells with NA values
 
-mar_group <- mar_group |> 
+may_group <- may_group |> 
   mutate(across(where(is.character), ~ na_if(.x, ""))) |> 
   distinct()
 
 # delete rows with all NA values because they provide essentially no information.
 
-mar_group <- mar_group |> 
+may_group <- may_group |> 
   filter(!if_all(-participantID, ~is.na(.)))
 
 # explore how many participants are missing from the apr_group df.
@@ -467,37 +464,8 @@ mar_group <- mar_group |>
 all_participants <- c(
   paste0("sp10-01-", sprintf("%02d", 1:56))
 )
-setdiff(all_participants, mar_group$participantID) |> 
+setdiff(all_participants, may_group$participantID) |> 
   length()
-```
-
-```{r}
-# replace multiple dots with single dot in the column names
-
-mar_group <- mar_group |> 
-  rename_with(~str_replace_all(., "\\.+", "."))
-
-# change the data type into character
-
-mar_group <- mar_group |>
-  mutate(across(-participantID, as.character))
-
-
-# combine the columns into group type, interaction, and group_number
-
-mar_group <- mar_group |>
- pivot_longer(
-    cols = -participantID,
-    names_to = c("group_type", "interaction", "group_number"),
-    names_pattern = "(Formal|Informal)\\.group[s]?\\.([a-z\\.]+)\\.Group\\.(\\d+)",
-    values_to = "group_name"
-  ) |>
-  filter(!is.na(group_name) & group_name != "") |> 
-
-# change the data type for group number into integar
-
-mar_group <- mar_group |>
-  mutate(group_number = as.integer(group_number))
 ```
 
 **b. Well-being**
@@ -628,4 +596,5 @@ all_participants <- c(
 setdiff(all_participants, date_coordinates$participantID) |> 
   length()
 ```
+
 
