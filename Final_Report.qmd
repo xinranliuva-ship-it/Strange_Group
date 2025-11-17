@@ -19,6 +19,9 @@ Each group member selected an individual research question to explore using the 
 
 #DO NOT REMOVE, this is to set the global message settings and library imports for every single code block afterwards.
 
+#| echo: false
+#| warning: false
+
 library(tidyverse)
 library(readxl)
 
@@ -101,7 +104,10 @@ However, between different months, the survey questions do overlap according to 
 survey_key = read_excel("SurveyMonthlyQuestionKey.xlsx")
 group_itemskey = survey_key |> 
   slice(c(168:171, 186:195))
-view(group_itemskey)
+
+#present the information in a table
+
+knitr::kable(head(group_itemskey), format = "pipe") 
 ```
 
 In the next step, we extract items like "Formal groups participation changed“ and "Formal groups new involvement“ from different monthly survey and store them in different tibbles (e.g. `mar_group`, `apr_group`, as mentioned in the following paragraphs). Therefore, the cases we are using contains both (participant) and (participant, month), with the former one focused on participants' demographics, and the latter one for variables that are related to our research questions.
@@ -259,7 +265,7 @@ date_coordinates = location_df |>
   arrange(participantID)
 ```
 
-## 2.2 Principle 2: Each observation must have its own row. 
+## 2.2 Principle 2: Each observation must have its own row.
 
 For principle 2, the researcher needed to ensure that no multiple observations were stacked into the same row. In order to achieve that, the researcher first examined all 11 tibbles created from the first step to spot repeated information. Then, the researcher should delete repeated information among different rows.
 
@@ -272,8 +278,7 @@ For principle 2, the researcher needed to ensure that no multiple observations w
 ```{r}
 #check to count the distinct values within Gender
 
-mar_demo |> 
-  count(Gender)
+knitr::kable(count(mar_demo, Gender), format = "pipe") 
 ```
 
 ```{r}
@@ -292,8 +297,7 @@ mar_demo <- mar_demo |>
 
 #check to count the distinct values within Gender
 
-mar_demo |> 
-  count(Gender)
+knitr::kable(count(mar_demo, Gender), format = "pipe") 
 ```
 
 There were in total 86 + 56 = 142 participants, but only 141 rows were found in mar_demo. The researcher then explored the missing participant and filled in their data with NA value.
@@ -422,6 +426,8 @@ all_participants <- c(
 setdiff(all_participants, apr_group$participantID) |> 
   length()
 ```
+
+The researcher spotted several repeated values in the columns and decided to pivot the columns into multiple rows for each different observation.
 
 ```{r}
 # change the data type into character
@@ -592,7 +598,7 @@ setdiff(all_participants, date_coordinates$participantID) |>
   length()
 ```
 
-## 2.3 Principle 3: Each variable must have its own column. 
+## 2.3 Principle 3: Each variable must have its own column.
 
 According to the third principle, each variable must have its own column, and each column must be a variable. This implies, also, that each variable must be stored in its unique, separate column. Headers must be variable names, and not data; variables must not appear in both rows and columns.
 
@@ -607,8 +613,6 @@ For each of the relevant monthly survey tibbles, we must perform adequate tidyin
 We may first inspect the original tibble. As seen below, column headers contain multiple types of information: besides the belonging/involvement variable, they also contain group number (1-6) and group type (formal/informal). This is in violation with principle three as stated above.
 
 ```{r}
-#| echo: false
-#| warning: false
 mar_group[mar_group == ""] <- NA
 knitr::kable(head(mar_group,5), format = "pipe") 
 ```
@@ -663,9 +667,6 @@ mar_group_clean <- left_join(
 The clean tibble now looks like:
 
 ```{r}
-#| echo: false
-#| warning: false
-
 knitr::kable(head(mar_group_clean,5), format = "pipe") 
 ```
 
@@ -674,8 +675,6 @@ knitr::kable(head(mar_group_clean,5), format = "pipe")
 Glimpse the communication table before principle three is applied. As can be noticed, one variable is here spread across several columns (channel of communication with friends). Frequencies are measured in terms of participant *and* channel.
 
 ```{r}
-#| echo: false
-#| warning: false
 mar10_commu[mar10_commu == ""] <- NA
 knitr::kable(head(mar10_commu,5), format = "pipe") 
 ```
@@ -697,9 +696,5 @@ mar10_commu_clean <- mar10_commu |>
 Now the output looks like this:
 
 ```{r}
-#| echo: false
-#| warning: false
 knitr::kable(head(mar10_commu_clean,5), format = "pipe") 
 ```
-
-
