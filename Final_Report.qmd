@@ -3,11 +3,13 @@ title: "Final_Report"
 format: html
 ---
 
-# 1. Introduction
+# 1.1 Introduction
+**The Friends and Family study was developed to better understand how people make decisions in their everyday lives, with a particular interest in how social relationships shape those choices and whether certain personal or social tools might help people make more effective decisions. The study took place in a residential community for young families located next to a major research university in North America. All households consisted of couples, and at least one partner in each couple was affiliated with the university. More than 130 adults participated during 2010 across two recruitment phases, forming a relatively small, closely connected community where many families also had children.
 
--   what is this project about
+**To capture detailed information about daily behaviour and interactions, participants used their personal Android smartphones that automatically recorded call logs, GPS location data, and SMS activity. These behavioural traces were combined with repeated self-report measures to gain insight into personal characteristics, attitudes, routines, and wellbeing. Participants completed a baseline personality survey, followed by a series of monthly and weekly questionnaires, as well as daily reports related to activities, lifestyle habits, and mood. 
 
--   what are our research questions maybe
+# 1.2 Research Questions 
+**Each group member selected an individual research question to explore using the tidied dataset. Carina will examine how sleep patterns and aerobic exercise levels are related and whether this relationship differs by gender. Ana will investigate how the friendship network evolves over time and how observed changes may relate to personal characteristics. Qi will focus on how the frequency of different types of networks, such as friends, fitness, and call or SMS interactions, relates to participant characteristics. Pherolyn will explore movement patterns by identifying who moves frequently versus infrequently and whether this relates to well-being. Xinran will study how communication with remote friends changes over time and how these patterns relate to personal attributes.
 
 # 2. Data Tidying
 
@@ -699,6 +701,7 @@ Now the output looks like this:
 #| warning: false
 knitr::kable(head(mar10_commu_clean,5), format = "pipe") 
 ```
+
 
 
 
