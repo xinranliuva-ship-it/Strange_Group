@@ -290,7 +290,6 @@ mar_demo <- mar_demo |>
 
 mar_demo |> 
   count(Gender)
-View(mar_demo)
 ```
 
 There were in total 86 + 56 = 142 participants, but only 141 rows were found in mar_demo. The researcher then explored the missing participant and filled in their data with NA value.
@@ -383,7 +382,6 @@ all_participants <- c(
 )
 setdiff(all_participants, apr_big5$participantID) |> 
   length()
-View(apr_big5)
 ```
 
 **b. Group participation**
@@ -428,11 +426,6 @@ The researcher spotted several repeated values in the columns and decided to piv
 
 apr_group <- apr_group |>
   mutate(across(-participantID, as.character))
-
-# change the data type for group number into integar
-
-apr_group <- apr_group |>
-  mutate(group_number = as.integer(group_number))
 ```
 
 ***Monthly survey May, 2010***
@@ -706,5 +699,6 @@ Now the output looks like this:
 #| warning: false
 knitr::kable(head(mar10_commu_clean,5), format = "pipe") 
 ```
+
 
 
