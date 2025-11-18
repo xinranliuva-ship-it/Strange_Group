@@ -448,8 +448,6 @@ setdiff(all_participants, mar10_commu$participantID) |>
 Glimpse the communication table before principle two is applied. As can be noticed, one variable is here spread across several columns (channel of communication with friends). Frequencies are measured in terms of participant *and* channel.
 
 ```{r}
-#| echo: false
-#| warning: false
 mar10_commu[mar10_commu == ""] <- NA
 knitr::kable(head(mar10_commu,5), format = "pipe") 
 ```
@@ -846,4 +844,5 @@ date_coordinates <- date_coordinates |>
   separate(date, c('Date', 'Time'), " ")
 knitr::kable(head(date_coordinates), format = "pipe")
 ```
+
 
