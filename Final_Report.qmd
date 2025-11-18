@@ -346,6 +346,69 @@ mar_group <- mar_group |>
   mutate(across(where(is.character), ~ na_if(.x, ""))) |> 
   distinct()
 ```
+We may first inspect the original tibble. As seen below, column headers contain multiple types of information: besides the belonging/involvement variable, they also contain group number (1-6) and group type (formal/informal). This is in violation with principle three as stated above.
+
+```{r}
+#| echo: false
+#| warning: false
+mar_group[mar_group == ""] <- NA
+knitr::kable(head(mar_group,5), format = "pipe") 
+```
+
+First, we investigate the belonging columns. We use the `pivot_longer`function to transition from the wide format to a longer one, with new column headers `Formal_Or_Informal` and `Group_Number` storing the names either preceding or appended to the `Group_Belonging`variable. The problem lays with the fact that the variable `Group_Number` does not store the value of the *i*th group for each of the *n* participants, but the value of the *i*th formal or *i*th informal group. This is lacking in clarity. We thus simply count the rows which share the same `participantID`.
+
+```{r}
+mar_group_belonging <- mar_group |>
+  select(participantID, contains("belong.to"))|>
+  pivot_longer(
+    cols = 'Formal.groups.belong.to..Group.1.': 'Informal.groups.belong.to..Group.6.',
+    names_to = c("Formal_or_Informal", "Group_Number"),
+    names_pattern = "(Formal|Informal)\\.groups\\.belong\\.to\\.\\.Group\\.(\\d+)\\.",
+    values_to = "Group_Belonging",
+    values_drop_na = TRUE) |>
+  group_by(participantID) |>
+  mutate(
+    Group_Number = row_number()
+  ) |>
+  ungroup() 
+```
+
+Second, the same procedure is applied to the involvement columns.
+
+```{r}
+mar_group_involvement <- mar_group |>
+  select(participantID, contains(".involvement"))|>
+  pivot_longer(
+    cols = 'Formal.group.involvement..Group.1.': 'Informal.group.involvement..Group.6.',
+    names_to = c("Formal_or_Informal", "Group_Number"),
+    names_pattern = "(Formal|Informal)\\.group\\.involvement\\.\\.Group\\.(\\d+)\\.",
+    values_to = "Group_Involvement",
+    values_drop_na = TRUE) |>
+    group_by(participantID) |>
+    mutate(
+      Group_Number = row_number()
+    ) |>
+    ungroup() 
+```
+
+Last, we left join the two artificially split tibbles to recreate the full one. `mar_group_involvement` features `r nrow(mar_group_belonging)` observations, and `mar_group_belonging` features `r nrow(mar_group_involvement)`, meaning that certain belonged-to groups have missing values for involvement. By left-joining on belonging, we capture those cases as well.
+```{r}
+mar_group <- left_join(
+  mar_group_belonging,         
+  mar_group_involvement,     
+  by = c("participantID", "Group_Number", "Formal_or_Informal")
+) |>
+  select(participantID, Group_Number, Group_Belonging, Group_Involvement, Formal_or_Informal)
+```
+
+The clean tibble now looks like:
+
+```{r}
+#| echo: false
+#| warning: false
+
+knitr::kable(head(mar_group,5), format = "pipe") 
+```
 
 *Communication with friends*
 
@@ -371,6 +434,37 @@ all_participants <- c(
 )
 setdiff(all_participants, mar10_commu$participantID) |> 
   length()
+```
+
+Glimpse the communication table before principle two is applied. As can be noticed, one variable is here spread across several columns (channel of communication with friends). Frequencies are measured in terms of participant *and* channel.
+
+```{r}
+#| echo: false
+#| warning: false
+mar10_commu[mar10_commu == ""] <- NA
+knitr::kable(head(mar10_commu,5), format = "pipe") 
+```
+
+We simply pivot from wide format to long, filling in the values with the strings succeeding 'friends' and replacing the dots with blank spaces for clarity.
+
+```{r}
+mar10_commu <- mar10_commu |>
+  pivot_longer(
+    cols = -participantID,
+    names_to = "Channel",
+    names_pattern ="Communicate\\.remote\\.friends\\.\\.(.*)",
+    values_to = "Frequency") |>
+  mutate(
+    Channel = str_replace_all(Channel, "\\.", " ") 
+  )
+```
+
+Now the output looks like this:
+
+```{r}
+#| echo: false
+#| warning: false
+knitr::kable(head(mar10_commu,5), format = "pipe") 
 ```
 
 #### **Monthly survey April, 2010**
@@ -438,6 +532,66 @@ The researcher spotted several repeated values in the columns and decided to piv
 apr_group <- apr_group |>
   mutate(across(-participantID, as.character))
 ```
+Group participation for the months following the initial survey is slightly more complex: we now have groups participants have stopped being a part of, groups participants have joined (with a new involvement variable) and groups participants had previously been a part of, but for which the level of involvement has changed. Still, a similar type of problematic data structure persists, as with the previous group participation tibble.
+
+```{r}
+#| echo: false
+#| warning: false
+knitr::kable(head(apr_group,5), format = "pipe")
+```
+
+First, we handle all columns not partaking to involvement. The first part of the column marks the type of group, the middle the action the participant has engaged in (joined/stopped/alerted participation), and the last the group number, which we must again change to number of rows associated with one `participantID`. We drop the *NA*s so we obtain only the groups for which an action and description was ascribed.
+
+```{r}
+apr_group_descript <- apr_group|>
+  select(participantID, !contains("involvement"))|>
+  pivot_longer(
+    cols = -participantID,
+    names_to = c("Formal_or_Informal", "Group_Action", "Group_Number"),
+    names_pattern = "(Formal|Informal)groups(.*)\\.Group(\\d+)",
+    values_to = "Group_Belonging",
+    values_drop_na = TRUE)|>
+  group_by(participantID)|>
+  mutate(
+    Group_Number = row_number())
+```
+
+We handle involvement in a similar fashion. We drop *NA*s so we obtain only the groups for which a level of involvement was specified.
+
+```{r}
+apr_group_involvement <- apr_group|>
+  select(participantID, contains("involvement"))|>
+  pivot_longer(
+    cols = -participantID,
+    names_to = c("Formal_or_Informal", "Involvement_Type", "Group_Number"),
+    names_pattern = "(Formal|Informal)groups(.*)\\.Group(\\d+)",
+    values_to = "Group_Involvement",
+    values_drop_na =TRUE)|>
+  group_by(participantID)|>
+  mutate(
+    Group_Number = row_number())
+```
+
+Finally, we left-join the two on `apr_group_descript`, so we do not miss out the `r nrow(apr_group_descript) - nrow(apr_group_involvement)` values for which a group was described, but an involvement level not specified.
+
+```{r}
+apr_group <- left_join(
+  apr_group_descript,         
+  apr_group_involvement,     
+  by = c("participantID", "Group_Number", "Formal_or_Informal")
+) |>
+  select(participantID, Group_Number, Group_Action, Group_Belonging, Group_Involvement, Formal_or_Informal)
+
+
+```
+
+The final tibble now looks like:
+
+```{r}
+#| echo: false
+#| warning: false
+knitr::kable(head(apr_group,5), format = "pipe") 
+```
 
 #### **Monthly survey May, 2010**
 
@@ -462,6 +616,42 @@ all_participants <- c(
 )
 setdiff(all_participants, may_group$participantID) |> 
   length()
+```
+The same procedure as above was applied to this tibble, as the data structure was identical to April, 2010. 
+
+```{r}
+#Pivoting group description and action tibble
+may_group_descript <- may_group|>
+  select(participantID, !contains("involvement"))|>
+  pivot_longer(
+    cols = -participantID,
+    names_to = c("Formal_or_Informal", "Group_Action", "Group_Number"),
+    names_pattern = "(Formal|Informal)groups(.*)\\.Group(\\d+)",
+    values_to = "Group_Belonging",
+    values_drop_na = TRUE)|>
+  group_by(participantID)|>
+  mutate(
+    Group_Number = row_number())
+#Pivoting involvement tibble
+may_group_involvement <- may_group|>
+  select(participantID, contains("involvement"))|>
+  pivot_longer(
+    cols = -participantID,
+    names_to = c("Formal_or_Informal", "Involvement_Type", "Group_Number"),
+    names_pattern = "(Formal|Informal)groups(.*)\\.Group(\\d+)",
+    values_to = "Group_Involvement",
+    values_drop_na =TRUE)|>
+  group_by(participantID)|>
+  mutate(
+    Group_Number = row_number())
+#Putting the two separated tibbles together
+may_group <- left_join(
+  may_group_descript,         
+  may_group_involvement,     
+  by = c("participantID", "Group_Number", "Formal_or_Informal")
+) |>
+  select(participantID, Group_Number, Group_Action, Group_Belonging, Group_Involvement, Formal_or_Informal)
+
 ```
 
 *Well-being*
@@ -563,7 +753,37 @@ all_participants <- c(
 setdiff(all_participants, mar11_commu$participantID) |> 
   length()
 ```
+The initial tibble is very similar to the 2010 communication one, except that the pattern the column names follow is slightly different.
 
+```{r}
+#| echo: false
+#| warning: false
+knitr::kable(head(mar11_commu,5), format = "pipe") 
+
+```
+
+We thus update the `name_pattern` argument. 
+
+```{r}
+mar11_commu <- mar11_commu |>
+  pivot_longer(
+    cols = -participantID,
+    names_to = "Channel",
+    names_pattern ="Communicateremotefriends\\.(.*)",
+    values_to = "Frequency") |>
+  mutate(
+    Channel = str_replace_all(Channel, "\\.", " ") 
+  )
+```
+
+Result:
+
+```{r}
+#| echo: false
+#| warning: false
+knitr::kable(head(mar11_commu,5), format = "pipe") 
+
+```
 ### 2.1.2 Location
 
 ```{r}
@@ -597,251 +817,7 @@ setdiff(all_participants, date_coordinates$participantID) |>
 
 According to the third principle, each variable must have its own column, and each column must be a variable. This implies, also, that each variable must be stored in its unique, separate column. Headers must be variable names, and not data; variables must not appear in both rows and columns.
 
-### 2.3.1 Monthly Survey
-
-For each of the relevant monthly survey tibbles, we must perform adequate tidying in accord with the principle.
-
-***Initial Survey/March, 2010***
-
-**Group participation**
-
-We may first inspect the original tibble. As seen below, column headers contain multiple types of information: besides the belonging/involvement variable, they also contain group number (1-6) and group type (formal/informal). This is in violation with principle three as stated above.
-
-```{r}
-#| echo: false
-#| warning: false
-mar_group[mar_group == ""] <- NA
-knitr::kable(head(mar_group,5), format = "pipe") 
-```
-
-First, we investigate the belonging columns. We use the `pivot_longer`function to transition from the wide format to a longer one, with new column headers `Formal_Or_Informal` and `Group_Number` storing the names either preceding or appended to the `Group_Belonging`variable. The problem lays with the fact that the variable `Group_Number` does not store the value of the *i*th group for each of the *n* participants, but the value of the *i*th formal or *i*th informal group. This is lacking in clarity. We thus simply count the rows which share the same `participantID`.
-
-```{r}
-mar_group_belonging <- mar_group |>
-  select(participantID, contains("belong.to"))|>
-  pivot_longer(
-    cols = 'Formal.groups.belong.to..Group.1.': 'Informal.groups.belong.to..Group.6.',
-    names_to = c("Formal_or_Informal", "Group_Number"),
-    names_pattern = "(Formal|Informal)\\.groups\\.belong\\.to\\.\\.Group\\.(\\d+)\\.",
-    values_to = "Group_Belonging",
-    values_drop_na = TRUE) |>
-  group_by(participantID) |>
-  mutate(
-    Group_Number = row_number()
-  ) |>
-  ungroup() 
-```
-
-Second, the same procedure is applied to the involvement columns.
-
-```{r}
-mar_group_involvement <- mar_group |>
-  select(participantID, contains(".involvement"))|>
-  pivot_longer(
-    cols = 'Formal.group.involvement..Group.1.': 'Informal.group.involvement..Group.6.',
-    names_to = c("Formal_or_Informal", "Group_Number"),
-    names_pattern = "(Formal|Informal)\\.group\\.involvement\\.\\.Group\\.(\\d+)\\.",
-    values_to = "Group_Involvement",
-    values_drop_na = TRUE) |>
-    group_by(participantID) |>
-    mutate(
-      Group_Number = row_number()
-    ) |>
-    ungroup() 
-```
-
-Last, we left join the two artificially split tibbles to recreate the full one. `mar_group_involvement` features `r nrow(mar_group_belonging)` observations, and `mar_group_belonging` features `r nrow(mar_group_involvement)`, meaning that certain belonged-to groups have missing values for involvement. By left-joining on belonging, we capture those cases as well.
-```{r}
-mar_group <- left_join(
-  mar_group_belonging,         
-  mar_group_involvement,     
-  by = c("participantID", "Group_Number", "Formal_or_Informal")
-) |>
-  select(participantID, Group_Number, Group_Belonging, Group_Involvement, Formal_or_Informal)
-```
-
-The clean tibble now looks like:
-
-```{r}
-#| echo: false
-#| warning: false
-
-knitr::kable(head(mar_group,5), format = "pipe") 
-```
 
 
-**Communication**
 
-Glimpse the communication table before principle three is applied. As can be noticed, one variable is here spread across several columns (channel of communication with friends). Frequencies are measured in terms of participant *and* channel.
-
-```{r}
-#| echo: false
-#| warning: false
-mar10_commu[mar10_commu == ""] <- NA
-knitr::kable(head(mar10_commu,5), format = "pipe") 
-```
-
-We simply pivot from wide format to long, filling in the values with the strings succeeding 'friends' and replacing the dots with blank spaces for clarity.
-
-```{r}
-mar10_commu <- mar10_commu |>
-  pivot_longer(
-    cols = -participantID,
-    names_to = "Channel",
-    names_pattern ="Communicate\\.remote\\.friends\\.\\.(.*)",
-    values_to = "Frequency") |>
-  mutate(
-    Channel = str_replace_all(Channel, "\\.", " ") 
-  )
-```
-
-Now the output looks like this:
-
-```{r}
-#| echo: false
-#| warning: false
-knitr::kable(head(mar10_commu,5), format = "pipe") 
-```
-
-***Monthly survey April, 2010***
-
-**Group participation**
-
-Group participation for the months following the initial survey is slightly more complex: we now have groups participants have stopped being a part of, groups participants have joined (with a new involvement variable) and groups participants had previously been a part of, but for which the level of involvement has changed. Still, a similar type of problematic data structure persists, as with the previous group participation tibble.
-
-```{r}
-#| echo: false
-#| warning: false
-knitr::kable(head(apr_group,5), format = "pipe")
-```
-
-First, we handle all columns not partaking to involvement. The first part of the column marks the type of group, the middle the action the participant has engaged in (joined/stopped/alerted participation), and the last the group number, which we must again change to number of rows associated with one `participantID`. We drop the *NA*s so we obtain only the groups for which an action and description was ascribed.
-
-```{r}
-apr_group_descript <- apr_group|>
-  select(participantID, !contains("involvement"))|>
-  pivot_longer(
-    cols = -participantID,
-    names_to = c("Formal_or_Informal", "Group_Action", "Group_Number"),
-    names_pattern = "(Formal|Informal)groups(.*)\\.Group(\\d+)",
-    values_to = "Group_Belonging",
-    values_drop_na = TRUE)|>
-  group_by(participantID)|>
-  mutate(
-    Group_Number = row_number())
-```
-
-We handle involvement in a similar fashion. We drop *NA*s so we obtain only the groups for which a level of involvement was specified.
-
-```{r}
-apr_group_involvement <- apr_group|>
-  select(participantID, contains("involvement"))|>
-  pivot_longer(
-    cols = -participantID,
-    names_to = c("Formal_or_Informal", "Involvement_Type", "Group_Number"),
-    names_pattern = "(Formal|Informal)groups(.*)\\.Group(\\d+)",
-    values_to = "Group_Involvement",
-    values_drop_na =TRUE)|>
-  group_by(participantID)|>
-  mutate(
-    Group_Number = row_number())
-```
-
-Finally, we left-join the two on `apr_group_descript`, so we do not miss out the `r nrow(apr_group_descript) - nrow(apr_group_involvement)` values for which a group was described, but an involvement level not specified.
-
-```{r}
-apr_group <- left_join(
-  apr_group_descript,         
-  apr_group_involvement,     
-  by = c("participantID", "Group_Number", "Formal_or_Informal")
-) |>
-  select(participantID, Group_Number, Group_Action, Group_Belonging, Group_Involvement, Formal_or_Informal)
-
-
-```
-
-The final tibble now looks like:
-
-```{r}
-#| echo: false
-#| warning: false
-knitr::kable(head(apr_group,5), format = "pipe") 
-```
-
-***Monthly survey May, 2010***
-
-**Group participation**
-
-The same procedure as above was applied to this tibble, as the data structure was identical to April, 2010. 
-
-```{r}
-#Pivoting group description and action tibble
-may_group_descript <- may_group|>
-  select(participantID, !contains("involvement"))|>
-  pivot_longer(
-    cols = -participantID,
-    names_to = c("Formal_or_Informal", "Group_Action", "Group_Number"),
-    names_pattern = "(Formal|Informal)groups(.*)\\.Group(\\d+)",
-    values_to = "Group_Belonging",
-    values_drop_na = TRUE)|>
-  group_by(participantID)|>
-  mutate(
-    Group_Number = row_number())
-#Pivoting involvement tibble
-may_group_involvement <- may_group|>
-  select(participantID, contains("involvement"))|>
-  pivot_longer(
-    cols = -participantID,
-    names_to = c("Formal_or_Informal", "Involvement_Type", "Group_Number"),
-    names_pattern = "(Formal|Informal)groups(.*)\\.Group(\\d+)",
-    values_to = "Group_Involvement",
-    values_drop_na =TRUE)|>
-  group_by(participantID)|>
-  mutate(
-    Group_Number = row_number())
-#Putting the two separated tibbles together
-may_group <- left_join(
-  may_group_descript,         
-  may_group_involvement,     
-  by = c("participantID", "Group_Number", "Formal_or_Informal")
-) |>
-  select(participantID, Group_Number, Group_Action, Group_Belonging, Group_Involvement, Formal_or_Informal)
-
-```
-
-***Monthly survey March, 2011***
-
-**Communication with friends**
-
-The initial tibble is very similar to the 2010 communication one, except that the pattern the column names follow is slightly different.
-
-```{r}
-#| echo: false
-#| warning: false
-knitr::kable(head(mar11_commu,5), format = "pipe") 
-
-```
-
-We thus update the `name_pattern` argument. 
-
-```{r}
-mar11_commu <- mar11_commu |>
-  pivot_longer(
-    cols = -participantID,
-    names_to = "Channel",
-    names_pattern ="Communicateremotefriends\\.(.*)",
-    values_to = "Frequency") |>
-  mutate(
-    Channel = str_replace_all(Channel, "\\.", " ") 
-  )
-```
-
-Result:
-
-```{r}
-#| echo: false
-#| warning: false
-knitr::kable(head(mar11_commu,5), format = "pipe") 
-
-```
 
