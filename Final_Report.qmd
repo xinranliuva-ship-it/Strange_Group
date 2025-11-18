@@ -817,7 +817,23 @@ setdiff(all_participants, date_coordinates$participantID) |>
 
 According to the third principle, each variable must have its own column, and each column must be a variable. This implies, also, that each variable must be stored in its unique, separate column. Headers must be variable names, and not data; variables must not appear in both rows and columns.
 
+## 2.4 Principle 4: Each value must have its own cell
 
+We checked all the 11 datasets whether they are following the principle 4 that each value must have its own cell. (*mar_demo, mar10_commu, mar_group, apr_big5, apr_group, may_group, may_well_being, oct_exe_act, oct_sleep_act, mar11_commu, date_coordinates).*
 
+Across the 11 datasets reviewed, all satisfy the "each value in its own cell" rull except the data_coordinates dataset.
 
+### 2.4.1 Date_coordinates
 
+In the datasets of location, which was renamed as *date_coordinates*, the date and time are combined into a single cell. In addition, there are This make it difficult to analyze data by day, time of day.
+
+Therefore, we need to separate the datetime column into two distinct columns, **Date** and **Time**. This step is necessary because the date and the time represent two distinct types of information, and placing them in separate cells improves the clarity of the dataset. This step is also aligns with the principle 4 that each value in its own cell. Moreover, since participants' locations were recorded at multiple time points within the same day, keeping date and time in one cell makes it difficult to perform analyses baed on "*day"* or "*time of day"*.
+
+Therefore, we use "separate()" function to separate these two values.
+
+```{r}
+#separate the datetime column into two colunms 
+date_coordinates <- date_coordinates |> 
+  separate(date, c('Date', 'Time'), " ")
+knitr::kable(head(date_coordinates), format = "pipe")
+```
