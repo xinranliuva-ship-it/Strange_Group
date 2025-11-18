@@ -444,14 +444,6 @@ apr_group <- apr_group |>
 *Group participation*
 
 ```{r}
-
-may_group = month1005_df |>
-  select(c(1, 73:132)) |> 
-  distinct() |> 
-  arrange(participantID)
-```
-
-```{r}
 # fill all empty cells with NA values
 
 may_group <- may_group |> 
@@ -852,3 +844,4 @@ Result:
 knitr::kable(head(mar11_commu,5), format = "pipe") 
 
 ```
+
