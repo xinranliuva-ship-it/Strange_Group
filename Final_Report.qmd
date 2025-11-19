@@ -14,7 +14,12 @@ To capture detailed information about daily behaviour and interactions, particip
 
 ## 1.1 Research Questions
 
-Each group member selected an individual research question to explore using the tidied dataset. Carina will examine how sleep patterns and aerobic exercise levels are related and whether this relationship differs by gender. Ana will investigate how the friendship network evolves over time and how observed changes may relate to personal characteristics. Qi will focus on how the frequency of different types of networks, such as friends, fitness, and call or SMS interactions, relates to participant characteristics. Pherolyn will explore movement patterns by identifying who moves frequently versus infrequently and whether this relates to well-being. Xinran will study how communication with remote friends changes over time and how these patterns relate to personal attributes.
+Each group member selected an individual research question to explore using the tidied dataset. The research questions that group members will further study are the following: 
+1. How are sleep patterns and aerobic exercise levels related, and does this relationship differ by gender?
+2. How does a friendship network change over time, and how might those changes relate to individual characteristics?
+3. How does the frequency of different network types—such as friendship, fitness, and call/SMS interactions—relate to participant characteristics?
+4. How do movement patterns vary between individuals who move frequently and those who move infrequently, and how might these patterns be connected to well-being?
+5. How does communication with remote friends shift over time, and how do these communication patterns relate to personal attributes?
 
 # 2. Data Tidying
 
@@ -844,5 +849,6 @@ date_coordinates <- date_coordinates |>
   separate(date, c('Date', 'Time'), " ")
 knitr::kable(head(date_coordinates), format = "pipe")
 ```
+
 
 
