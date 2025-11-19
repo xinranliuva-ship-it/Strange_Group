@@ -929,7 +929,7 @@ In March, 2010, for spring participants, channels names were: phone, text, email
 
 In March, 2011, number of items changed from 4 to 5, where they combined all the items measured before, namely: land-line/cellphone, Skype, text message/SMS, online chat/instant message and email. They completely discarded the items that were first outlined in the initial survey, instead they just added email as an extra item in the follow up survey in March, 2011. This mismatch of survey items could possibly decrease the internal validity of the study in this case.
 
-##4 Table contents, relations & data joins
+## 4 Table contents, relations & data joins
 
 ```{r}
 #PK mar_demo: participantID
@@ -989,6 +989,7 @@ date_coordinates|>
 
 
 ```
+
 
 
 
