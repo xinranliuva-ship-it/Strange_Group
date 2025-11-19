@@ -497,38 +497,33 @@ knitr::kable(head(mar_group,5), format = "pipe")
 
 *Communication with friends*
 
-```{r}
-# delete rows with all NA values because they provide essentially no information.
-
-mar10_commu <- mar10_commu |> 
-  filter(!if_all(-participantID, ~is.na(.)))
-
-# fill all empty cells with NA values
-
-mar10_commu <- mar10_commu |> 
-  mutate(across(where(is.character), ~ na_if(.x, ""))) |> 
-  distinct()
-```
-
-```{r}
-# explore how many participants are missing from the mar10_commu df.
-
-all_participants <- c(
-  paste0("sp10-01-", sprintf("%02d", 1:56)),
-  paste0("fa10-01-", sprintf("%02d", 1:40))
-)
-setdiff(all_participants, mar10_commu$participantID) |> 
-  length()
-```
-
 Glimpse the communication table before principle two is applied. Frequencies are measured in terms of participant *and* channel. So that each such observation can have its own row, this tibble too must be pivoted longer, in accordance with principle two.
 
 ```{r}
 mar10_commu[mar10_commu == ""] <- NA
 knitr::kable(head(mar10_commu,5), format = "pipe") 
 ```
+In addition, the researcher discovered that participants with ID starting "sp" and "fa" were asked two different sets of questions with overlapping questions. The participants sp10-01-01 to sp10-01-56 answered questions on channels: phone, text, email, and chat, while participants fa10-01-01 to fa10-01-86 answered questions on channels: phone, Skype, text, and chat.
 
-We simply pivot from wide format to long, filling in the values with the strings succeeding 'friends' and replacing the dots with blank spaces for clarity.
+Thus, the researcher decided to combine the overlapping columns together. 
+
+```{r}
+# combine the three columns that essentially asked the same questions but on different waves of participants
+
+mar10_commu <- mar10_commu |> 
+  transmute(participantID = participantID,
+            Communicate.remote.friends..email = Communicate.remote.friends..email,
+            Communicate.remote.friends..internet.phone..ex..Skype. = Communicate.remote.friends..internet.phone..ex..Skype.,
+            Communicate.remote.friends..phone..landline.or.cell.phone. = 
+           coalesce(Communicate.remote.friends..phone, Communicate.remote.friends..phone..landline.or.cell.phone.),
+         Communicate.remote.friends..text.message.SMS =
+           coalesce(Communicate.remote.friends..text.message.SMS, Communicate.remote.friends..phone),
+         Communicate.remote.friends..online.chat.instant.message = 
+           coalesce(Communicate.remote.friends..online.chat.instant.message, Communicate.remote.friends..chat),
+         )
+```
+
+We then simply pivot from wide format to long, filling in the values with the strings succeeding 'friends' and replacing the dots with blank spaces for clarity.
 
 ```{r}
 mar10_commu <- mar10_commu |>
@@ -540,6 +535,16 @@ mar10_commu <- mar10_commu |>
   mutate(
     Channel = str_replace_all(Channel, "\\.", " ") 
   )
+```
+
+To make the NA values be represented consistently across cells, the researcher coded to fill empty cells with NA values.
+
+```{r}
+# fill all empty cells with NA values
+
+mar10_commu <- mar10_commu |> 
+  mutate(across(where(is.character), ~ na_if(.x, ""))) |> 
+  distinct()
 ```
 
 Now the output looks like this:
@@ -912,6 +917,7 @@ knitr::kable(head(date_coordinates), format = "pipe")
 
 # 4. Description of Tidy Data 
 The dataset used in our analysis integrates several components of the Friends & Family study: monthly opinion surveys from April 2010 through April 2011, daily mood observations (DayMood.csv), an initial personality survey (InitialSurvey.csv and SurveyBig5.csv), and location traces recorded through participants’ phones (Location.csv.bz2). All data originate from adult members of a residential community located next to a major North American research university. Participants are couples in which at least one partner is affiliated with the university, and their identifiers are consistent across the different datasets. Geographically, all participants reside in the same residential community, meaning spatial variation at the regional level is not part of the dataset. Temporally, the data cover roughly one year, from spring 2010 to spring 2011, with the exact number of monthly observations per participant depending on when they joined the study and how regularly they responded. As a result, some participants appear in only one month while others appear in many.
+
 
 
 
