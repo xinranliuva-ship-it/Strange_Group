@@ -6,25 +6,25 @@ format:
     toc-location: left 
 ---
 
-#1.Introduction
+# 1.Introduction
 
 The Friends and Family study was developed to better understand how people make decisions in their everyday lives, with a particular interest in how social relationships shape those choices and whether certain personal or social tools might help people make more effective decisions. The study took place in a residential community for young families located next to a major research university in North America. All households consisted of couples, and at least one partner in each couple was affiliated with the university. More than 130 adults participated during 2010 across two recruitment phases, forming a relatively small, closely connected community where many families also had children.
 
 To capture detailed information about daily behaviour and interactions, participants used their personal Android smartphones that automatically recorded call logs, GPS location data, and SMS activity. These behavioural traces were combined with repeated self-report measures to gain insight into personal characteristics, attitudes, routines, and well-being. Participants completed a baseline personality survey, followed by a series of monthly and weekly questionnaires, as well as daily reports related to activities, lifestyle habits, and mood.
 
-##1.1 Research Questions
+## 1.1 Research Questions
 
-Each group member selected an individual research question to explore using the tidied dataset. The research questions that group members will further study are the following: 
+Each group member selected an individual research question to explore using the tidied dataset. The research questions that group members will further study are the following:
 
-1. How are sleep patterns and aerobic exercise levels related, and does this relationship differ by gender? 
+1.  How are sleep patterns and aerobic exercise levels related, and does this relationship differ by gender?
 
-2. How does a friendship network change over time, and how might those changes relate to individual characteristics? 
+2.  How does a friendship network change over time, and how might those changes relate to individual characteristics?
 
-3. How does the frequency of different network types—such as friendship, fitness, and call/SMS interactions—relate to participant characteristics? 
+3.  How does the frequency of different network types—such as friendship, fitness, and call/SMS interactions—relate to participant characteristics?
 
-4. How do movement patterns vary between individuals who move frequently and those who move infrequently, and how might these patterns be connected to well-being? 
+4.  How do movement patterns vary between individuals who move frequently and those who move infrequently, and how might these patterns be connected to well-being?
 
-5. How does communication with remote friends shift over time, and how do these communication patterns relate to personal attributes?
+5.  How does communication with remote friends shift over time, and how do these communication patterns relate to personal attributes?
 
 
 
@@ -928,6 +928,7 @@ Second, survey items that measures the same variable changed across different wa
 In March, 2010, for spring participants, channels names were: phone, text, email and chat. For fall participants, however, channels names were: land-line/cellphone, Skype, text message/SMS, and online chat/instant message.
 
 In March, 2011, number of items changed from 4 to 5, where they combined all the items measured before, namely: land-line/cellphone, Skype, text message/SMS, online chat/instant message and email. They completely discarded the items that were first outlined in the initial survey, instead they just added email as an extra item in the follow up survey in March, 2011. This mismatch of survey items could possibly decrease the internal validity of the study in this case.
+
 
 
 
