@@ -167,7 +167,7 @@ knitr::kable(head(mar_group), format = "pipe")
 
 *Communication with friends*
 
-Communication with friends was defined as the frequency of communicationg with friends through different remote channels. This scale is measured repetitively across March, 2010 and March 2011.
+Communication with friends was defined as the frequency of communicating with friends through different remote channels. This scale is measured repetitively across March, 2010 and March 2011.
 
 ```{r}
 mar10_commu = initial_df |> 
@@ -231,7 +231,7 @@ knitr::kable(head(may_group), format = "pipe")
 
 *Well-being*
 
-Well-being measures participans' monthly psychological state by agreeing or disagreeing sets of statements. This scale was recorded only once.
+Well-being measures participants' monthly psychological state by agreeing or disagreeing sets of statements. This scale was recorded only once.
 
 ```{r}
 may_well_being = month1005_df |> 
@@ -916,6 +916,7 @@ knitr::kable(head(date_coordinates), format = "pipe")
 The dataset covers adult members of a young-family residential community located next to a major North American research university. All participants are couples, and at least one partner in each couple is affiliated with the university. The experiment includes more than 130 adults (over 65 couples), with some participants entering in spring 2010 and others beginning in fall 2010.
 
 Before cleaning, several issues raised questions with respect to the four tidy-data principles, such as variables split across multiple files, inconsistent use of wide versus long formats, slightly mismatched identifiers, and uneven time coverage across subjects. These concerns mainly reflected the complexity of combining tracking data with surveys of different frequencies. After cleaning, these issues were addressed by ensuring each variable occupies a single column, each observation a single row, and each observational unit its own table, producing a structure that aligns with tidy-data standards.
+
 
 
 
