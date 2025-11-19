@@ -937,7 +937,7 @@ The tidy data sets includes participant id as well as all 7 variables relevant t
 
 While we were trying to clean the data sets, several doubts were raised.
 
-First of all, issues in data collecting. Regarding self-reporting items, researchers did not restrict numbers of submissions per participant based on the IP address. As a result, participants might open the same survey for twice with all of the trials being recorded, and one of them consisting of NA values entirely. Regarding auto-recorded items, such as location, data points with the same participant id, the same recording date and time, and the same coordinates were sometimes also recorded twice.
+First of all, issues in data collecting. Regarding self-reporting items, researchers did not restrict numbers of submissions per participant based on the IP address. As a result, participants might open the same survey for twice with all of the trials being recorded, and one of them consisting of NA values entirely，or for the same survey item, multiple answers were being recorded. For example, for communicating with friends, some participants gave contradicting answers to the frequency of use for the same channel. Regarding auto-recorded items, such as location, data points with the same participant id, the same recording date and time, and the same coordinates were sometimes also recorded twice.
 
 Second, survey items that measures the same variable changed across different waves of the study. For example, for the variable communicating with friends, channels were named different according to the `SurveyMonthlyQuestionKey.csv`:
 
@@ -1007,6 +1007,7 @@ date_coordinates|>
 
 
 ```
+
 
 
 
