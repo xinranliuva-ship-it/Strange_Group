@@ -931,15 +931,15 @@ knitr::kable(head(date_coordinates), format = "pipe")
 
 # 3. Description of Tidy Data
 
-The tidy data sets includes participant id as well as all 7 variables relevant to our research questions, namely demographics, group participation, communicating with friends, big 5, well-being, aerobic exercise actual, and sleep actual. Survey data of all variables mentioned was collected during March to may, 2010, as well as October, 2010 and March 2011. Regarding participants, 56 participants joined the study from March, 2010 (Spring participants, participantID starting with sp-), and 86 participants joined the study from October,2010 (Fall participants, participantID starting with fa-). Therefore, variables that were recorded only once between March and May, 2010 only contains survey responses from spring participants.
+The tidy data sets includes participant id as well as all 7 variables relevant to our research questions, namely demographics, group participation, communicating with friends, big 5, well-being, aerobic exercise actual, and sleep actual. Survey data of all variables mentioned was collected during March to may, 2010, as well as October, 2010 and March 2011. Regarding participants, 56 participants joined the study from March, 2010 (Spring participants, `participantID` starting with `sp-`), and 86 participants joined the study from October,2010 (Fall participants, `participantID` starting with `fa-`). Therefore, variables that were recorded only once between March and May, 2010 only contains survey responses from spring participants.
 
 ## 3.1 Doubt regarding data quality
 
 While we were trying to clean the data sets, several doubts were raised.
 
-First of all, issues in data collecting. Regarding self-reporting items, researchers did not restrict numbers of submissions per participant based on the IP address. As a result, participants might open the same survey for twice with all of the trials being recorded, and one of them consisting of NA values entirely. Regarding auto-recorded items, such as location, data points with the same participant id, the same recording date and time, and the same coordinates were sometimes also recorded twice. 
+First of all, issues in data collecting. Regarding self-reporting items, researchers did not restrict numbers of submissions per participant based on the IP address. As a result, participants might open the same survey for twice with all of the trials being recorded, and one of them consisting of NA values entirely. Regarding auto-recorded items, such as location, data points with the same participant id, the same recording date and time, and the same coordinates were sometimes also recorded twice.
 
-Second, survey items that measures the same variable changed across different waves of the study. For example, for the variable communicating with friends, channels were named different according to the SurveyMonthlyQuestionKey.csv:
+Second, survey items that measures the same variable changed across different waves of the study. For example, for the variable communicating with friends, channels were named different according to the `SurveyMonthlyQuestionKey.csv`:
 
 In March, 2010, for spring participants, channels names were: phone, text, email and chat. For fall participants, however, channels names were: land-line/cellphone, Skype, text message/SMS, and online chat/instant message.
 
@@ -1005,6 +1005,7 @@ date_coordinates|>
 
 
 ```
+
 
 
 
