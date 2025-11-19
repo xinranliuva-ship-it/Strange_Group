@@ -517,7 +517,7 @@ mar10_commu <- mar10_commu |>
             Communicate.remote.friends..phone..landline.or.cell.phone. = 
            coalesce(Communicate.remote.friends..phone, Communicate.remote.friends..phone..landline.or.cell.phone.),
          Communicate.remote.friends..text.message.SMS =
-           coalesce(Communicate.remote.friends..text.message.SMS, Communicate.remote.friends..phone),
+           coalesce(Communicate.remote.friends..text.message.SMS, Communicate.remote.friends..text),
          Communicate.remote.friends..online.chat.instant.message = 
            coalesce(Communicate.remote.friends..online.chat.instant.message, Communicate.remote.friends..chat),
          )
@@ -928,6 +928,7 @@ Second, survey items that measures the same variable changed across different wa
 In March, 2010, for spring participants, channels names were: phone, text, email and chat. For fall participants, however, channels names were: land-line/cellphone, Skype, text message/SMS, and online chat/instant message.
 
 In March, 2011, number of items changed from 4 to 5, where they combined all the items measured before, namely: land-line/cellphone, Skype, text message/SMS, online chat/instant message and email. They completely discarded the items that were first outlined in the initial survey, instead they just added email as an extra item in the follow up survey in March, 2011. This mismatch of survey items could possibly decrease the internal validity of the study in this case.
+
 
 
 
