@@ -897,6 +897,22 @@ According to the third principle, each variable must have its own column, and ea
 
 After inspecting each of our designated tibbles, it became apparent that none were in violation of principle three. As none of our tibbles were of extensive size, using `pivot_longer` did not produce further issues with the data structure, such as spreading a variable across several columns. In general, the heftiest issues with the semantics of this dataset had to do with principle two violations, such as in the case of `mar_group` and `apr_group`. Thus, no situations were the use of `pivot_wider` was appropriate appeared.
 
+## 2.4 Principle 4: Each value must have its own cell.
+
+Principle 4 states that for every single cell in the tibble, there should only be one value instead of multiple ones.
+
+### 2.4.1 Monthly survey
+
+We manually checked all 10 tibbles we separated from monthly survey data sets (`mar_demo`, `mar10_commu`, `mar_group`, `apr_big5`, `apr_group`, `may_group`, `may_well_being`, `oct_exe_act`, `oct_sleep_act`, `mar11_commu`), they already met the criteria for principle 4 after principle 2 & 3 were done.
+
+Take `may_well_being` as an example, as it is shown in the following table:
+
+```{r}
+#present an overview of the tibble
+
+knitr::kable(head(may_well_being), format = "pipe") 
+```
+
 ### 2.4.2 Location
 
 In the data set of location (`date_coordinates`*)*, the date and time are combined into a single cell. Since participants' locations were recorded at multiple time points within the same day, keeping date and time in one cell makes it difficult to perform analyses based solely on "*day"* or "*time of day"*. Therefore, we need to separate the datetime column into two distinct columns, **Date** and **Time**. This step is necessary because the date and the time represent two distinct types of information, and placing them in separate cells improves the clarity of the data set.
@@ -989,6 +1005,7 @@ date_coordinates|>
 
 
 ```
+
 
 
 
