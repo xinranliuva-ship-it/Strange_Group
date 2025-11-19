@@ -825,9 +825,11 @@ setdiff(all_participants, date_coordinates$participantID) |>
   length()
 ```
 
-## 2.3 Principle 3: Each variable must have its own column. (Draft ver.)
+## 2.3 Principle 3: Each variable must have its own column. 
 
 According to the third principle, each variable must have its own column, and each column must be a variable. This implies, also, that each variable must be stored in its unique, separate column. Headers must be variable names, and not data; variables must not appear in both rows and columns.
+
+After inspecting each of our designated tibbles, it became apparent that none were in violation of principle three. As none of our tibbles were of extensive size, using `pivot_longer` did not produce further issues with the data structure, such as spreading a variable across several columns. In general, the heftiest issues with the semantics of this dataset had to do with principle two violations, such as in the case of `mar_group` and `apr_group`. Thus, no situations were the use of `pivot_wider` was appropriate appeared.
 
 ## 2.4 Principle 4: Each value must have its own cell
 
@@ -849,6 +851,7 @@ date_coordinates <- date_coordinates |>
   separate(date, c('Date', 'Time'), " ")
 knitr::kable(head(date_coordinates), format = "pipe")
 ```
+
 
 
 
