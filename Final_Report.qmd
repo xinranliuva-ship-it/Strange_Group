@@ -982,13 +982,14 @@ mar11_commu|>
   count(participantID, Channel) |> 
   filter(n > 1)
 
-#PK date_coordinates: 
+#PK date_coordinates: participantID, Date, Time
 date_coordinates|> 
   count(participantID, Date, Time) |> 
   filter(n > 1)
 
 
 ```
+
 
 
 
