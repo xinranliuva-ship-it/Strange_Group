@@ -6,13 +6,13 @@ format:
     toc-location: left 
 ---
 
-1.Introduction
+#1.Introduction
 
 The Friends and Family study was developed to better understand how people make decisions in their everyday lives, with a particular interest in how social relationships shape those choices and whether certain personal or social tools might help people make more effective decisions. The study took place in a residential community for young families located next to a major research university in North America. All households consisted of couples, and at least one partner in each couple was affiliated with the university. More than 130 adults participated during 2010 across two recruitment phases, forming a relatively small, closely connected community where many families also had children.
 
-To capture detailed information about daily behaviour and interactions, participants used their personal Android smartphones that automatically recorded call logs, GPS location data, and SMS activity. These behavioural traces were combined with repeated self-report measures to gain insight into personal characteristics, attitudes, routines, and wellbeing. Participants completed a baseline personality survey, followed by a series of monthly and weekly questionnaires, as well as daily reports related to activities, lifestyle habits, and mood.
+To capture detailed information about daily behaviour and interactions, participants used their personal Android smartphones that automatically recorded call logs, GPS location data, and SMS activity. These behavioural traces were combined with repeated self-report measures to gain insight into personal characteristics, attitudes, routines, and well-being. Participants completed a baseline personality survey, followed by a series of monthly and weekly questionnaires, as well as daily reports related to activities, lifestyle habits, and mood.
 
-1.1 Research Questions
+##1.1 Research Questions
 
 Each group member selected an individual research question to explore using the tidied dataset. The research questions that group members will further study are the following: 
 
@@ -912,6 +912,7 @@ knitr::kable(head(date_coordinates), format = "pipe")
 
 # 4. Description of Tidy Data 
 The dataset used in our analysis integrates several components of the Friends & Family study: monthly opinion surveys from April 2010 through April 2011, daily mood observations (DayMood.csv), an initial personality survey (InitialSurvey.csv and SurveyBig5.csv), and location traces recorded through participants’ phones (Location.csv.bz2). All data originate from adult members of a residential community located next to a major North American research university. Participants are couples in which at least one partner is affiliated with the university, and their identifiers are consistent across the different datasets. Geographically, all participants reside in the same residential community, meaning spatial variation at the regional level is not part of the dataset. Temporally, the data cover roughly one year, from spring 2010 to spring 2011, with the exact number of monthly observations per participant depending on when they joined the study and how regularly they responded. As a result, some participants appear in only one month while others appear in many.
+
 
 
 
