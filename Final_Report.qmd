@@ -109,7 +109,7 @@ month1004_df |>
   filter(n>1)
 ```
 
-We used the same code across different monthly data sets and confirmed that `participantID` is indeed the primary key for all of them. Thus, `participantID` will be included in all separate tibbles we created to also act as the foreign key.
+We used the same code across different monthly data sets and confirmed that `participantID` is indeed the primary key for all of them. Thus, `participantID` will be included in all separate tibbles we created.
 
 However, between different months, the survey questions do overlap according to `SurveyMonthlyQuestionKey.csv`. For example, for the research objectives "friendship network change", the relevant scale is called "group involvement", which was measured by several items across different months. For items like "Formal group involvement", it was only measured once in the initial survey, while for items like "Formal groups participation changed“ and "Formal groups new involvement“, it is an update to previous survey responses, thus were measured in both April and May, 2010, as it is listed below.
 
@@ -916,6 +916,7 @@ knitr::kable(head(date_coordinates), format = "pipe")
 The dataset covers adult members of a young-family residential community located next to a major North American research university. All participants are couples, and at least one partner in each couple is affiliated with the university. The experiment includes more than 130 adults (over 65 couples), with some participants entering in spring 2010 and others beginning in fall 2010.
 
 Before cleaning, several issues raised questions with respect to the four tidy-data principles, such as variables split across multiple files, inconsistent use of wide versus long formats, slightly mismatched identifiers, and uneven time coverage across subjects. These concerns mainly reflected the complexity of combining tracking data with surveys of different frequencies. After cleaning, these issues were addressed by ensuring each variable occupies a single column, each observation a single row, and each observational unit its own table, producing a structure that aligns with tidy-data standards.
+
 
 
 
