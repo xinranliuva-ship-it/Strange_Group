@@ -929,9 +929,11 @@ date_coordinates <- date_coordinates |>
 knitr::kable(head(date_coordinates), format = "pipe")
 ```
 
+
+
 # 3. Description of Tidy Data
 
-The tidy data sets includes participant id as well as all 7 variables relevant to our research questions, namely demographics, group participation, communicating with friends, big 5, well-being, aerobic exercise actual, and sleep actual. Survey data of all variables mentioned was collected during March to may, 2010, as well as October, 2010 and March 2011. Regarding participants, 56 participants joined the study from March, 2010 (Spring participants, `participantID` starting with `sp-`), and 86 participants joined the study from October,2010 (Fall participants, `participantID` starting with `fa-`). Therefore, variables that were recorded only once between March and May, 2010 only contains survey responses from spring participants.
+The tidy data sets includes participant id as well as all 7 variables relevant to our research questions, namely demographics, group participation, communicating with friends, big 5, well-being, aerobic exercise actual, and sleep actual. Survey data of all variables mentioned was collected during March to may, 2010, as well as October, 2010 and March 2011. Regarding participants, 56 participants were considered as spring participants (`participantID` starting with `sp-`), and 86 participants were considered as fall participants (`participantID` starting with `fa-`), they joined in different waves of the study. Therefore, for some variables, only spring participants' responses were recorded, as they joined the study earlier than fall participants.
 
 ## 3.1 Doubt regarding data quality
 
@@ -941,9 +943,9 @@ First of all, issues in data collecting. Regarding self-reporting items, researc
 
 Second, survey items that measures the same variable changed across different waves of the study. For example, for the variable communicating with friends, channels were named different according to the `SurveyMonthlyQuestionKey.csv`:
 
-In March, 2010, for spring participants, channels names were: phone, text, email and chat. For fall participants, however, channels names were: land-line/cellphone, Skype, text message/SMS, and online chat/instant message.
+In March, 2010, for spring participants, channels names were: phone, text, email, chat, land-line/cellphone, Skype, text message/SMS, and online chat/instant message.
 
-In March, 2011, number of items changed from 4 to 5, where they combined all the items measured before, namely: land-line/cellphone, Skype, text message/SMS, online chat/instant message and email. They completely discarded the items that were first outlined in the initial survey, instead they just added email as an extra item in the follow up survey in March, 2011. This mismatch of survey items could possibly decrease the internal validity of the study in this case.
+In March, 2011, number of items changed from 8 to 5, namely: land-line/cellphone, Skype, text message/SMS, online chat/instant message and email. They completely discarded the items that were first outlined in the initial survey, instead they just added email as an extra item in the follow up survey in March, 2011. This mismatch of survey items could possibly decrease the internal validity of the study in this case.
 
 
 
@@ -1007,6 +1009,7 @@ date_coordinates|>
 
 
 ```
+
 
 
 
