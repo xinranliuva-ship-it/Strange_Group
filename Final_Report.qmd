@@ -418,9 +418,6 @@ mar_group <- left_join(
 The clean tibble then looked like:
 
 ```{r}
-#| echo: false
-#| warning: false
-
 knitr::kable(head(mar_group,5), format = "pipe") 
 ```
 
@@ -474,8 +471,6 @@ mar10_commu <- mar10_commu |>
 Now the output looks like this:
 
 ```{r}
-#| echo: false
-#| warning: false
 knitr::kable(head(mar10_commu,5), format = "pipe") 
 ```
 
@@ -547,8 +542,6 @@ apr_group <- apr_group |>
 Group participation for the months following the initial survey is slightly more complex: we now have groups participants have stopped being a part of, groups participants have joined (with a new involvement variable) and groups participants had previously been a part of, but for which the level of involvement has changed. Still, a similar type of problematic data structure persists, as with the previous group participation tibble.
 
 ```{r}
-#| echo: false
-#| warning: false
 knitr::kable(head(apr_group,5), format = "pipe")
 ```
 
@@ -600,8 +593,6 @@ apr_group <- left_join(
 The final tibble now looks like:
 
 ```{r}
-#| echo: false
-#| warning: false
 knitr::kable(head(apr_group,5), format = "pipe") 
 ```
 
@@ -768,8 +759,6 @@ setdiff(all_participants, mar11_commu$participantID) |>
 The initial tibble is very similar to the 2010 communication one, except that the pattern the column names follow is slightly different.
 
 ```{r}
-#| echo: false
-#| warning: false
 knitr::kable(head(mar11_commu,5), format = "pipe") 
 
 ```
@@ -791,8 +780,6 @@ mar11_commu <- mar11_commu |>
 Result:
 
 ```{r}
-#| echo: false
-#| warning: false
 knitr::kable(head(mar11_commu,5), format = "pipe") 
 
 ```
@@ -855,6 +842,7 @@ knitr::kable(head(date_coordinates), format = "pipe")
 The dataset covers adult members of a young-family residential community located next to a major North American research university. All participants are couples, and at least one partner in each couple is affiliated with the university. The experiment includes more than 130 adults (over 65 couples), with some participants entering in spring 2010 and others beginning in fall 2010.
 
 Before cleaning, several issues raised questions with respect to the four tidy-data principles, such as variables split across multiple files, inconsistent use of wide versus long formats, slightly mismatched identifiers, and uneven time coverage across subjects. These concerns mainly reflected the complexity of combining tracking data with surveys of different frequencies. After cleaning, these issues were addressed by ensuring each variable occupies a single column, each observation a single row, and each observational unit its own table, producing a structure that aligns with tidy-data standards.
+
 
 
 
