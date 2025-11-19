@@ -947,9 +947,9 @@ In March, 2010, for spring participants, channels names were: phone, text, email
 
 In March, 2011, number of items changed from 8 to 5, namely: land-line/cellphone, Skype, text message/SMS, online chat/instant message and email. They completely discarded the items that were first outlined in the initial survey, instead they just added email as an extra item in the follow up survey in March, 2011. This mismatch of survey items could possibly decrease the internal validity of the study in this case.
 
-
-
 # 4 Table contents, relations & data joins
+
+Now that we have generated such a wealth of clean tibbles, we will examine potential relationships between those tables by checking the primary key for each one. The goal is to determine whether relationships are one-to-one, one-to-many, or many-to-many. 
 
 ```{r}
 #PK mar_demo: participantID
@@ -962,7 +962,7 @@ mar_group |>
   count(participantID, Group_Number) |> 
   filter(n > 1)
 
-#PK mar10_commu:
+#PK mar10_commu: participantID, Channel
 mar10_commu |> 
   count(participantID, Channel) |> 
   filter(n > 1)
@@ -1002,13 +1002,26 @@ mar11_commu|>
   count(participantID, Channel) |> 
   filter(n > 1)
 
-#PK date_coordinates: participantID, Date, Time
+#PK date_coordinates: 
 date_coordinates|> 
   count(participantID, Date, Time) |> 
   filter(n > 1)
 
 
 ```
+
+For most tibbles, the primary key consists of only one variable: `participantID`. For the exceptions, `participantID` is still a subset of their respective composite primary keys. `participantID` can thus act as a foreign key, i.e. a reference towards the primary keys of all other tables.
+For joins concerning solely tables with a single-variable primary key, the relationship entailed will be one-to-one. For joins between singular-key tibbles and composite-key tibbles (e.g. a left-join on `oct_exe_act` with `date_coordinates`), the relationship will be one-to-many, as one participant with one aerobic exercise value has multiple coordinates at various times on various dates. An exception is the relationship between `mar_demo` and `mar_group`, as `mar_demo` contains information about groupless participants, as can be seen below:
+
+```{r}
+groupless_participants <- anti_join(mar_demo, mar_group, by = "participantID")
+knitr::kable(head(groupless_participants), format = "pipe")
+
+```
+
+In this case, the relationship entailed is many-to-many. We may preserve it this way while joining or remove such cases when in need of information from both tables. In joining two composite-key tibbles, we would also create a many-to-many relationship. 
+
+
 
 
 
