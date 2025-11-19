@@ -911,9 +911,9 @@ knitr::kable(head(date_coordinates), format = "pipe")
 # 3. Data joints
 
 # 4. Description of Tidy Data 
-The dataset covers adult members of a young-family residential community located next to a major North American research university. All participants are couples, and at least one partner in each couple is affiliated with the university. The experiment includes more than 130 adults (over 65 couples), with some participants entering in spring 2010 and others beginning in fall 2010.
+The dataset used in our analysis integrates several components of the Friends & Family study: monthly opinion surveys from April 2010 through April 2011, daily mood observations (DayMood.csv), an initial personality survey (InitialSurvey.csv and SurveyBig5.csv), and location traces recorded through participants’ phones (Location.csv.bz2). All data originate from adult members of a residential community located next to a major North American research university. Participants are couples in which at least one partner is affiliated with the university, and their identifiers are consistent across the different datasets. Geographically, all participants reside in the same residential community, meaning spatial variation at the regional level is not part of the dataset. Temporally, the data cover roughly one year, from spring 2010 to spring 2011, with the exact number of monthly observations per participant depending on when they joined the study and how regularly they responded. As a result, some participants appear in only one month while others appear in many.
 
-Before cleaning, several issues raised questions with respect to the four tidy-data principles, such as variables split across multiple files, inconsistent use of wide versus long formats, slightly mismatched identifiers, and uneven time coverage across subjects. These concerns mainly reflected the complexity of combining tracking data with surveys of different frequencies. After cleaning, these issues were addressed by ensuring each variable occupies a single column, each observation a single row, and each observational unit its own table, producing a structure that aligns with tidy-data standards.
+
 
 
 
