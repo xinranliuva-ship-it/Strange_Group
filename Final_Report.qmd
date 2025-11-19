@@ -522,6 +522,18 @@ mar10_commu <- mar10_commu |>
            coalesce(Communicate.remote.friends..online.chat.instant.message, Communicate.remote.friends..chat),
          )
 ```
+Upon examination of the output, the researcher discovered that multiple answers for the same questions were spotted for certain participants. The researcher deemed that this was due to repeated quittings and half-way finished answers. The researcher then decided to remove repeated answers by leaving only the rows with the least NA values, because those were filled with more precision and care.
+
+```{r}
+# keep row with fewer NAs
+
+mar10_commu <- mar10_commu |>
+  mutate(na_count = rowSums(is.na(across(-participantID)))) |>
+  group_by(participantID) |>
+  slice_min(na_count, n = 1, with_ties = FALSE) |>
+  ungroup() |>
+  select(-na_count)    
+```
 
 We then simply pivot from wide format to long, filling in the values with the strings succeeding 'friends' and replacing the dots with blank spaces for clarity.
 
@@ -1020,6 +1032,7 @@ knitr::kable(head(groupless_participants), format = "pipe")
 ```
 
 In this case, the relationship entailed is many-to-many. We may preserve it this way while joining or remove such cases when in need of information from both tables. In joining two composite-key tibbles, we would also create a many-to-many relationship. 
+
 
 
 
