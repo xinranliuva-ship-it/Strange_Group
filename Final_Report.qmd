@@ -450,7 +450,7 @@ setdiff(all_participants, mar10_commu$participantID) |>
   length()
 ```
 
-Glimpse the communication table before principle two is applied. As can be noticed, one variable is here spread across several columns (channel of communication with friends). Frequencies are measured in terms of participant *and* channel.
+Glimpse the communication table before principle two is applied. Frequencies are measured in terms of participant *and* channel. So that each such observation can have its own row, this tibble too must be pivoted longer, in accordance with principle two.
 
 ```{r}
 mar10_commu[mar10_commu == ""] <- NA
@@ -851,6 +851,7 @@ date_coordinates <- date_coordinates |>
   separate(date, c('Date', 'Time'), " ")
 knitr::kable(head(date_coordinates), format = "pipe")
 ```
+
 
 
 
